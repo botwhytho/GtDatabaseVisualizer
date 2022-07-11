@@ -28,12 +28,6 @@ GtDatabaseVisualizer >> children [
 ]
 
 { #category : #accessing }
-GtDatabaseVisualizer >> initialize [
-	super initialize.
-	parent := self
-]
-
-{ #category : #accessing }
 GtDatabaseVisualizer >> parent [
 	^ parent
 ]

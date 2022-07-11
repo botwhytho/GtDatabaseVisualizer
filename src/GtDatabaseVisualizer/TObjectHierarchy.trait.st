@@ -32,8 +32,7 @@ TObjectHierarchy >> gtHierarchyFor: aView [
 		children: [ :aNode | aNode children ];
 		actionUpdateButtonTooltip: 'Update tree';
 		column: 'Name' text: [ :aNode :anIndex | aNode asString ];
-		column: 'Type'
-			text: [  "weight: 3;" "expandAll;" "send: [ :aNode | aNode value ]":aNode :anIndex | aNode class ]
+		column: 'Type' text: [ :aNode :anIndex | aNode class ]
 ]
 
 { #category : #accessing }
@@ -50,16 +49,8 @@ TObjectHierarchy >> parent: anObject [
 
 { #category : #accessing }
 TObjectHierarchy >> root [
-	"| entity |
-	entity :=  parent ifNil: [ ^ thisContext receiver ].
-	[ entity ] whileNotNil: [ entity := entity parent ].
-	^ entity"
-	"| entity |
-	entity :=  parent.
-	[ entity = thisContext receiver ] whileFalse: [ entity := entity parent ].
-	^ entity"
 	| entity |
-	entity :=  thisContext receiver.
+	entity := thisContext receiver.
 	[ entity parent ] whileNotNil: [ entity := entity parent ].
 	^ entity
 ]

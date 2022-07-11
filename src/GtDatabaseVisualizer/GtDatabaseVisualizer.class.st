@@ -10,6 +10,16 @@ Class {
 }
 
 { #category : #accessing }
+GtDatabaseVisualizer class >> gtDatabasesFor: aView [
+	<gtClassView>
+	^ aView forward
+		title: 'Databases';
+		priority: 1;
+		object: [ self uniqueInstance ];
+		view: #gtHierarchyFor:
+]
+
+{ #category : #accessing }
 GtDatabaseVisualizer >> children [
 	^ children ifNil: [ children := self servers ]
 ]
@@ -22,7 +32,7 @@ GtDatabaseVisualizer >> initialize [
 
 { #category : #accessing }
 GtDatabaseVisualizer >> parent [
-	^ parent ifNil: [ parent := self ]
+	^ parent
 ]
 
 { #category : #accessing }

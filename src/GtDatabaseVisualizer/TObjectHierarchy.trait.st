@@ -60,6 +60,6 @@ TObjectHierarchy >> root [
 	^ entity"
 	| entity |
 	entity :=  thisContext receiver.
-	[ entity ] whileNotNil: [ entity := entity parent ].
+	[ entity parent ] whileNotNil: [ entity := entity parent ].
 	^ entity
 ]

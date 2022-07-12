@@ -23,13 +23,8 @@ GtDatabaseVisualizer class >> gtDatabasesFor: aView [
 ]
 
 { #category : #accessing }
-GtDatabaseVisualizer >> children [
+GtDatabaseVisualizer >> hierarchyChildren [
 	^ children ifNil: [ children := self servers ]
-]
-
-{ #category : #accessing }
-GtDatabaseVisualizer >> parent [
-	^ parent
 ]
 
 { #category : #accessing }

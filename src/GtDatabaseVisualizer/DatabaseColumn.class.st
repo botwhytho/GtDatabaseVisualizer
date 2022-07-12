@@ -22,17 +22,17 @@ DatabaseColumn >> attributes: anObject [
 ]
 
 { #category : #accessing }
-DatabaseColumn >> children [
-	^ children ifNil: [ children := self attributes ]
-]
-
-{ #category : #accessing }
 DatabaseColumn >> getColumnAttributes [
 	^ self getEntities
 ]
 
 { #category : #accessing }
-DatabaseColumn >> parent [
+DatabaseColumn >> hierarchyChildren [
+	^ children ifNil: [ children := self attributes ]
+]
+
+{ #category : #accessing }
+DatabaseColumn >> hierarchyParent [
 	^ parent ifNil: [ parent := table ]
 ]
 

@@ -11,11 +11,6 @@ Class {
 }
 
 { #category : #accessing }
-DatabaseColumnAttribute >> children [
-	^ children ifNil: [ children := #() ]
-]
-
-{ #category : #accessing }
 DatabaseColumnAttribute >> column [
 
 	^ column
@@ -28,7 +23,7 @@ DatabaseColumnAttribute >> column: anObject [
 ]
 
 { #category : #accessing }
-DatabaseColumnAttribute >> parent [
+DatabaseColumnAttribute >> hierarchyParent [
 	^ parent ifNil: [ parent := self column ]
 ]
 

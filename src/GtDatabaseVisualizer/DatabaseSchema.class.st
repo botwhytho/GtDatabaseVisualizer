@@ -11,13 +11,6 @@ Class {
 }
 
 { #category : #accessing }
-DatabaseSchema >> children [
-	self
-		flag: 'TODO: only dealing with tables for now. Account for other DB objects/entities like functions later.'.
-	^ children ifNil: [ children := self tables ]
-]
-
-{ #category : #accessing }
 DatabaseSchema >> database [
 
 	^ database
@@ -35,7 +28,14 @@ DatabaseSchema >> getTables [
 ]
 
 { #category : #accessing }
-DatabaseSchema >> parent [
+DatabaseSchema >> hierarchyChildren [
+	self
+		flag: 'TODO: only dealing with tables for now. Account for other DB objects/entities like functions later.'.
+	^ children ifNil: [ children := self tables ]
+]
+
+{ #category : #accessing }
+DatabaseSchema >> hierarchyParent [
 	^ parent ifNil: [ parent := database ]
 ]
 

@@ -10,11 +10,6 @@ Class {
 }
 
 { #category : #accessing }
-DatabaseServer >> children [
-	^ children ifNil: [ children := self databases ]
-]
-
-{ #category : #accessing }
 DatabaseServer >> databases [
 	^ databases ifNil: [ databases := OrderedCollection new ]
 ]
@@ -30,15 +25,20 @@ DatabaseServer >> getDatabases [
 	^ self getEntities
 ]
 
+{ #category : #accessing }
+DatabaseServer >> hierarchyChildren [
+	^ children ifNil: [ children := self databases ]
+]
+
+{ #category : #accessing }
+DatabaseServer >> hierarchyParent [
+	^ parent ifNil: [ parent := GtDatabaseVisualizer uniqueInstance ]
+]
+
 { #category : #initialization }
 DatabaseServer >> initialize [
 	super initialize.
 	GtDatabaseVisualizer uniqueInstance servers add: self
-]
-
-{ #category : #accessing }
-DatabaseServer >> parent [
-	^ parent ifNil: [ parent := GtDatabaseVisualizer uniqueInstance ]
 ]
 
 { #category : #initialization }

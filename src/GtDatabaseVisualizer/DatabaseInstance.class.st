@@ -11,17 +11,17 @@ Class {
 }
 
 { #category : #accessing }
-DatabaseInstance >> children [
-	^ children ifNil: [ children := self schemas ]
-]
-
-{ #category : #accessing }
 DatabaseInstance >> getSchemas [
 	^ self getEntities
 ]
 
 { #category : #accessing }
-DatabaseInstance >> parent [
+DatabaseInstance >> hierarchyChildren [
+	^ children ifNil: [ children := self schemas ]
+]
+
+{ #category : #accessing }
+DatabaseInstance >> hierarchyParent [
 	^ parent ifNil: [ parent := server ]
 ]
 

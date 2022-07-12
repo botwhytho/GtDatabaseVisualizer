@@ -11,11 +11,6 @@ Class {
 }
 
 { #category : #accessing }
-DatabaseTable >> children [
-	^ children ifNil: [ children := self columns ]
-]
-
-{ #category : #accessing }
 DatabaseTable >> columns [
 	^ columns ifNil: [ columns := OrderedCollection new ]
 ]
@@ -32,7 +27,12 @@ DatabaseTable >> getColumns [
 ]
 
 { #category : #accessing }
-DatabaseTable >> parent [
+DatabaseTable >> hierarchyChildren [
+	^ children ifNil: [ children := self columns ]
+]
+
+{ #category : #accessing }
+DatabaseTable >> hierarchyParent [
 	^ parent ifNil: [ parent := schema ]
 ]
 

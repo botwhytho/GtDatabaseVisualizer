@@ -68,7 +68,7 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 PostgresDatabaseTable >> gtTableRelationsFor: aView [
 	<gtView>
 	^ aView mondrian
-		title: 'Table Relationships';
+		title: 'All Table Relationships';
 		priority: 2;
 		painting: [ :aMondrian | 
 			| connections tableRelationships view |

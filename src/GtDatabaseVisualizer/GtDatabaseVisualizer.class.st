@@ -14,7 +14,8 @@ GtDatabaseVisualizer class >> gtDatabasesFor: aView [
 	<gtClassView>
 	| root |
 	root := self uniqueInstance.
-	(root children isNil or: [ root children isEmpty ]) ifTrue: [ ^ aView empty ].
+	(root hierarchyChildren isNil or: [ root hierarchyChildren isEmpty ])
+		ifTrue: [ ^ aView empty ].
 	^ aView forward
 		title: 'Databases';
 		priority: 1;

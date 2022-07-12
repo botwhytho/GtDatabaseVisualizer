@@ -8,20 +8,37 @@ Class {
 PostgresDatabaseServer class >> fromConnectionString: aString [
 	| connector |
 	connector := PostgresDatabaseConnector fromConnectionString: aString.
-	^ self new
-		name: connector client asString;
-		client: connector;
-		populateDatabases
+	^ self
+		populateInBackground: (self new
+				name: connector client asString;
+				client: connector)
 ]
 
 { #category : #accessing }
 PostgresDatabaseServer class >> fromConnectionString: aString withShortName: aShortName [
-	^ self new
-		name: aShortName;
-		client: (PostgresDatabaseConnector
-				fromConnectionString: aString
-				withShortName: aShortName);
-		populateDatabases
+	| connector |
+	connector := PostgresDatabaseConnector
+			fromConnectionString: aString
+			withShortName: aShortName.
+	^ self
+		populateInBackground: (self new
+				name: aShortName;
+				client: connector)
+]
+
+{ #category : #accessing }
+PostgresDatabaseServer class >> populateInBackground: aDatabaseServer [
+	| thisCoder |
+	thisCoder := (thisContext stack
+			detect: [ :each | each contextClass = GtPharoSourceCoder ]) receiver.
+	[ self inform: 'Beginning import.'.
+	aDatabaseServer populateDatabases.
+	self inform: 'Finished import.'.
+	thisCoder
+		notifyToolSpawn: (GtInspectorTool forObject: aDatabaseServer)
+		withDestination: thisCoder spawnDestination ]
+		forkAt: 29
+		named: #postgresSchemaPopulate
 ]
 
 { #category : #accessing }

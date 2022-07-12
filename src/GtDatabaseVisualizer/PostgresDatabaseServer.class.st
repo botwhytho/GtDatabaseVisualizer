@@ -29,15 +29,16 @@ PostgresDatabaseServer >> populateDatabases [
 	| databasesNames |
 	databasesNames := self client class toDictionaries: self getDatabases.
 
-	self databases
-		addAll: (databasesNames
-				collect: [ :aDatabase | 
-					PostgresDatabaseInstance new
-						name: aDatabase name;
-						client: self client;
-						server: self;
-						populateSchemas	";
-						yourself" ])
+	databasesNames
+		do: [ :aDatabase | 
+			aDatabase name = 'template0'
+				ifFalse: [ self client client database: aDatabase name.
+					self databases
+						add: (PostgresDatabaseInstance new
+								name: aDatabase name;
+								client: self client;
+								server: self;
+								populateSchemas) ] ]
 ]
 
 { #category : #accessing }

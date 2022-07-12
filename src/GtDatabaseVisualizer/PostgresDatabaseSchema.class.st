@@ -42,6 +42,10 @@ PostgresDatabaseSchema >> allForeignKeys [
 ]
 
 { #category : #accessing }
+PostgresDatabaseSchema >> allIndexes [
+]
+
+{ #category : #accessing }
 PostgresDatabaseSchema >> populateTables [
 	| tableNames |
 	tableNames := self client class toDictionaries: self getTables.
@@ -53,7 +57,9 @@ PostgresDatabaseSchema >> populateTables [
 						client: self client;
 						schema: self;
 						valuable: (MessageSend receiver: self selector: #allColumns);
-						populateColumns) ]
+						populateColumns) ].
+	self allForeignKeys.
+	self allIndexes
 ]
 
 { #category : #accessing }

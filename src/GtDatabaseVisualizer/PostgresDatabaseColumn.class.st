@@ -6,20 +6,27 @@ Class {
 
 { #category : #accessing }
 PostgresDatabaseColumn >> populateColumnAtributes [
-	| allColumnAttributes attributesInThisColumn |
-	self valuable: (MessageSend receiver: self table schema selector: #allColumns).
-	allColumnAttributes := self getEntities.
-	attributesInThisColumn := allColumnAttributes
-			select: [ :column | column table_name = self table name and: [ column column_name = self name ] ].
-	attributesInThisColumn
+	| attributeNames columnAttributes |
+	columnAttributes := self getColumnAttributes.
+	attributeNames := columnAttributes columnNames.
+	columnAttributes data
 		do: [ :aColumnAttributeRow | 
-			(aColumnAttributeRow associations
-				reject: [ :each | #('table_name' 'column_name') includes: each key ])
+			attributeNames
 				do: [ :aColumnAttribute | 
 					self attributes
 						add: (PostgresDatabaseColumnAttribute new
-								name: aColumnAttribute key;
-								value: aColumnAttribute value;
+								name: aColumnAttribute;
+								value: (aColumnAttributeRow at: (attributeNames indexOf: aColumnAttribute));
 								client: self client;
 								column: self) ] ]
+]
+
+{ #category : #accessing }
+PostgresDatabaseColumn >> query [
+	^ query
+		ifNil: [ query := 'SELECT ordinal_position, column_default, is_nullable, data_type
+FROM information_schema.columns
+WHERE table_schema = $1
+AND table_name = $2
+AND column_name = $3' ]
 ]

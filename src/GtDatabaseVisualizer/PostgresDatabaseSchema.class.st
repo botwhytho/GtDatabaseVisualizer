@@ -47,16 +47,17 @@ PostgresDatabaseSchema >> allIndexes [
 
 { #category : #accessing }
 PostgresDatabaseSchema >> populateTables [
-	| tableNames |
-	tableNames := self client class toDictionaries: self getTables.
-	tableNames
+	| tableNames tableNameColumn |
+	"tableNames := self client class toDictionaries: self getTables."
+	tableNames := self getTables.
+	tableNameColumn := tableNames columnNames indexOf: 'name'.
+	tableNames data
 		do: [ :aTable | 
 			self tables
 				add: (PostgresDatabaseTable new
-						name: aTable name;
+						name: (aTable at: tableNameColumn);
 						client: self client;
 						schema: self;
-						valuable: (MessageSend receiver: self selector: #allColumns);
 						populateColumns) ].
 	self allForeignKeys.
 	self allIndexes

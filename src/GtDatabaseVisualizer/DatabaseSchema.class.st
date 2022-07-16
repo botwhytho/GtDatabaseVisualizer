@@ -1,8 +1,8 @@
 Class {
 	#name : #DatabaseSchema,
 	#superclass : #Object,
-	#traits : 'TDatabaseEntity + TObjectHierarchy',
-	#classTraits : 'TDatabaseEntity classTrait + TObjectHierarchy classTrait',
+	#traits : 'TGtDatabaseEntity + TObjectHierarchy',
+	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'database',
 		'tables'
@@ -24,7 +24,7 @@ DatabaseSchema >> database: anObject [
 
 { #category : #accessing }
 DatabaseSchema >> getTables [
-	^ self getEntities: {self name}
+	^ self getEntitiesWithArgs: {self name}
 ]
 
 { #category : #accessing }

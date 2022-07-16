@@ -1,8 +1,8 @@
 Class {
 	#name : #DatabaseServer,
 	#superclass : #Object,
-	#traits : 'TDatabaseEntity + TObjectHierarchy',
-	#classTraits : 'TDatabaseEntity classTrait + TObjectHierarchy classTrait',
+	#traits : 'TGtDatabaseEntity + TObjectHierarchy',
+	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'databases'
 	],
@@ -22,7 +22,7 @@ DatabaseServer >> databases: anObject [
 
 { #category : #accessing }
 DatabaseServer >> getDatabases [
-	^ self getEntities
+	^ self getEntitiesWithArgs: nil
 ]
 
 { #category : #accessing }

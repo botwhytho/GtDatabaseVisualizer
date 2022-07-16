@@ -1,8 +1,8 @@
 Class {
 	#name : #DatabaseColumnAttribute,
 	#superclass : #Object,
-	#traits : 'TDatabaseEntity + TObjectHierarchy',
-	#classTraits : 'TDatabaseEntity classTrait + TObjectHierarchy classTrait',
+	#traits : 'TGtDatabaseEntity + TObjectHierarchy',
+	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'column',
 		'value'

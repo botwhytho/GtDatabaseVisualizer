@@ -1,8 +1,8 @@
 Class {
 	#name : #DatabaseTable,
 	#superclass : #Object,
-	#traits : 'TDatabaseEntity + TObjectHierarchy',
-	#classTraits : 'TDatabaseEntity classTrait + TObjectHierarchy classTrait',
+	#traits : 'TGtDatabaseEntity + TObjectHierarchy',
+	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'columns',
 		'schema'
@@ -23,7 +23,9 @@ DatabaseTable >> columns: anObject [
 
 { #category : #accessing }
 DatabaseTable >> getColumns [
-	^ self getEntities
+	^ self
+		getEntitiesWithArgs: {self schema name.
+				self name}
 ]
 
 { #category : #accessing }

@@ -31,28 +31,29 @@ PostgresDatabaseServer class >> populateInBackground: aDatabaseServer [
 	| thisCoder |
 	thisCoder := (thisContext stack
 			detect: [ :each | each contextClass = GtPharoSourceCoder ]) receiver.
-	[ self inform: 'Beginning import.'.
-	aDatabaseServer populateDatabases.
+	"[" self inform: 'Beginning import.'.
+	"["[ aDatabaseServer populateDatabases ] ensure: [ aDatabaseServer client client close ]"] timeProfile".
 	self inform: 'Finished import.'.
 	thisCoder
 		notifyToolSpawn: (GtInspectorTool forObject: aDatabaseServer)
-		withDestination: thisCoder spawnDestination ]
+		withDestination: thisCoder spawnDestination "]
 		forkAt: 29
-		named: #postgresSchemaPopulate
+		named: #postgresSchemaPopulate"
 ]
 
 { #category : #accessing }
 PostgresDatabaseServer >> populateDatabases [
-	| databasesNames |
-	databasesNames := self client class toDictionaries: self getDatabases.
-
-	databasesNames
+	| databaseNameColumn databasesNames |
+	"databasesNames := self client class toDictionaries: self getDatabases."
+	databasesNames := self getDatabases.
+	databaseNameColumn := databasesNames columnNames indexOf: 'name'.
+	databasesNames data
 		do: [ :aDatabase | 
-			aDatabase name = 'template0'
-				ifFalse: [ self client client database: aDatabase name.
+			(aDatabase at: databaseNameColumn) = 'template0'
+				ifFalse: [ self client client database: (aDatabase at: databaseNameColumn).
 					self databases
 						add: (PostgresDatabaseInstance new
-								name: aDatabase name;
+								name: (aDatabase at: databaseNameColumn);
 								client: self client;
 								server: self;
 								populateSchemas) ] ]

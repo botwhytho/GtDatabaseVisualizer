@@ -125,9 +125,24 @@ PostgresDatabaseTable >> gtTableRelationsFor: aView [
 
 { #category : #accessing }
 PostgresDatabaseTable >> populateColumns [
+	| columnNames columnNamecolumn |
+	columnNames := self getColumns.
+	columnNamecolumn := columnNames columnNames indexOf: 'name'.
+	columnNames data
+		do: [ :aColumn | 
+			self columns
+				add: (PostgresDatabaseColumn new
+						name: (aColumn at: columnNamecolumn);
+						client: self client;
+						table: self;
+						populateColumnAtributes) ]
+]
+
+{ #category : #accessing }
+PostgresDatabaseTable >> populateColumnsOld [
 	| allColumns columnsInThisTable |
 	self valuable: (MessageSend receiver: self schema selector: #allColumns).
-	allColumns := self getEntities.
+	allColumns := self getEntitiesWithArgs: nil.
 	columnsInThisTable := allColumns select: [ :column | column table_name = self name ].
 	columnsInThisTable
 		do: [ :aColumn | 
@@ -137,4 +152,14 @@ PostgresDatabaseTable >> populateColumns [
 						client: self client;
 						table: self;
 						populateColumnAtributes) ]
+]
+
+{ #category : #accessing }
+PostgresDatabaseTable >> query [
+	^ query
+		ifNil: [ query := 'SELECT column_name AS name
+FROM information_schema.columns
+WHERE table_schema = $1
+AND table_name = $2
+ORDER BY ordinal_position' ]
 ]

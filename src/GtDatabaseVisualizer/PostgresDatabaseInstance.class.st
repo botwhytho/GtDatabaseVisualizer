@@ -6,13 +6,15 @@ Class {
 
 { #category : #accessing }
 PostgresDatabaseInstance >> populateSchemas [
-	| schemaNames |
-	schemaNames := self client class toDictionaries: self getSchemas.
-	schemaNames
+	| schameNameColumn schemaNames |
+	"schemaNames := self client class toDictionaries: self getSchemas."
+	schemaNames := self getSchemas.
+	schameNameColumn := schemaNames columnNames indexOf: 'name'.
+	schemaNames data
 		do: [ :aSchema | 
 			self schemas
 				add: (PostgresDatabaseSchema new
-						name: aSchema name;
+						name: (aSchema at: schameNameColumn);
 						client: self client;
 						database: self;
 						populateTables) ]

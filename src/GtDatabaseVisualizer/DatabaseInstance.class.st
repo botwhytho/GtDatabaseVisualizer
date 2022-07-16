@@ -1,8 +1,8 @@
 Class {
 	#name : #DatabaseInstance,
 	#superclass : #Object,
-	#traits : 'TDatabaseEntity + TObjectHierarchy',
-	#classTraits : 'TDatabaseEntity classTrait + TObjectHierarchy classTrait',
+	#traits : 'TGtDatabaseEntity + TObjectHierarchy',
+	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'server',
 		'schemas'
@@ -12,7 +12,7 @@ Class {
 
 { #category : #accessing }
 DatabaseInstance >> getSchemas [
-	^ self getEntities
+	^ self getEntitiesWithArgs: nil
 ]
 
 { #category : #accessing }

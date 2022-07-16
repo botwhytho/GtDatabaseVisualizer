@@ -40,14 +40,14 @@ PostgresDatabaseConnector >> printOn: aStream [
 
 { #category : #accessing }
 PostgresDatabaseConnector >> query: aString [
-	^ client in: [ :p3Client | [ p3Client query: aString ] ensure: [ client close ] ]
+	^ client in: [ :p3Client | "[" p3Client query: aString "] ensure: [ client close ]" ]
 ]
 
 { #category : #accessing }
 PostgresDatabaseConnector >> query: aString withArguments: args [
 	| statement |
-	statement := client prepare: aString.
-	^ client in: [ :p3Client | [ statement query: args ] ensure: [ client close ] ]
+	statement := client "prepare"format: aString.
+	^ client in: [ :p3Client | "[" statement query: args "] ensure: [ client close ]" ]
 ]
 
 { #category : #accessing }

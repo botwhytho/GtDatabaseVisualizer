@@ -11,7 +11,7 @@ Trait {
 TObjectHierarchy >> gtHierarchyFor: aView [
 	<gtView>
 	| root |
-	root := thisContext receiver hierarchyRoot.
+	root := self hierarchyRoot.
 	(root hierarchyChildren isNil or: [ root hierarchyChildren isEmpty ])
 		ifTrue: [ ^ aView empty ].
 	^ aView columnedTree
@@ -47,7 +47,7 @@ TObjectHierarchy >> hierarchyParent: anObject [
 { #category : #accessing }
 TObjectHierarchy >> hierarchyRoot [
 	| entity |
-	entity := thisContext receiver.
+	entity := self.
 	[ entity hierarchyParent ] whileNotNil: [ entity := entity hierarchyParent ].
 	^ entity
 ]

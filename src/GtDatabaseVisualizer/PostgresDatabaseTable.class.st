@@ -42,12 +42,14 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 									text: x name asRopedText;
 									constraintsDo: [ :c | c horizontal matchParent ] ];
 							with: table columns.
-						view layout vertical ].	"Invisible edges that affect the tree layout."
+						view layout vertical ].
+			"Invisible edges that affect the tree layout."
 			view edges
 				shape: [ :x | BlLineElement new ];
 				connect: tableRelationships
 					from: [ :each | each key ]
 					to: [ :each | each value ].
+			"Visible edges that are 'passive' and don't affect the tree layout."
 			view edges
 				fromRightCenter;
 				toLeftCenter;
@@ -98,12 +100,14 @@ PostgresDatabaseTable >> gtTableRelationsFor: aView [
 									text: x name asRopedText;
 									constraintsDo: [ :c | c horizontal matchParent ] ];
 							with: table columns.
-						view layout vertical ].	"Invisible edges that affect the tree layout."
+						view layout vertical ].
+			"Invisible edges that affect the tree layout."
 			view edges
 				shape: [ :x | BlLineElement new ];
 				connect: tableRelationships
 					from: [ :each | each key ]
 					to: [ :each | each value ].
+			"Visible edges that are 'passive' and don't affect the tree layout."
 			view edges
 				fromRightCenter;
 				toLeftCenter;

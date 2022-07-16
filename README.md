@@ -7,7 +7,8 @@ Interactive tool to visualize table details & foreign key relationships in SQL d
 ```Smalltalk
 [ EpMonitor current disableDuring: [ Metacello new
    baseline: 'GtDatabaseVisualizer';
-   repository: 'github://botwhytho/GtDatabaseVisualizer:main/src';   onConflictUseLoaded;
+   repository: 'github://botwhytho/GtDatabaseVisualizer:main/src';
+   onConflictUseLoaded;
    load. ]] forkAt: 29 named: #GtDatabaseVisualizer
    ```
    
@@ -18,5 +19,5 @@ Interactive tool to visualize table details & foreign key relationships in SQL d
    This is currently alpha level software built during a weekend, with no error handling. If this is useful to you please help me make it better.
    
    ```Smalltalk
-   PostgresDatabaseServer fromConnectionString: 'psql://postgres:*********@localhost:5433/dvdrental' withShortName: 'DVD Rental'
+   GtDatabaseVisualizer postgres fromConnectionString: 'psql://postgres:*********@localhost:5433/dvdrental' withShortName: 'DVD Rental'
    ``` 

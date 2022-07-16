@@ -1,8 +1,8 @@
 Trait {
 	#name : #TObjectHierarchy,
 	#instVars : [
-		'children',
-		'parent'
+		'hierarchyChildren',
+		'hierarchyParent'
 	],
 	#category : #GtDatabaseVisualizer
 }
@@ -31,7 +31,7 @@ TObjectHierarchy >> hierarchyChildren [
 
 { #category : #accessing }
 TObjectHierarchy >> hierarchyChildren: anObject [
-	children := anObject
+	hierarchyChildren := anObject
 ]
 
 { #category : #accessing }
@@ -41,7 +41,7 @@ TObjectHierarchy >> hierarchyParent [
 
 { #category : #accessing }
 TObjectHierarchy >> hierarchyParent: anObject [
-	parent := anObject
+	hierarchyParent := anObject
 ]
 
 { #category : #accessing }

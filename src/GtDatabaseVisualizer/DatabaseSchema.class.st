@@ -48,12 +48,12 @@ DatabaseSchema >> getTables [
 DatabaseSchema >> hierarchyChildren [
 	self
 		flag: 'TODO: only dealing with tables for now. Account for other DB objects/entities like functions later.'.
-	^ children ifNil: [ children := self tables ]
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self tables ]
 ]
 
 { #category : #accessing }
 DatabaseSchema >> hierarchyParent [
-	^ parent ifNil: [ parent := database ]
+	^ hierarchyParent ifNil: [ hierarchyParent := database ]
 ]
 
 { #category : #accessing }

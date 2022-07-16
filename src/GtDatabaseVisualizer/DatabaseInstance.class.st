@@ -22,12 +22,12 @@ DatabaseInstance >> getSchemas [
 
 { #category : #accessing }
 DatabaseInstance >> hierarchyChildren [
-	^ children ifNil: [ children := self schemas ]
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self schemas ]
 ]
 
 { #category : #accessing }
 DatabaseInstance >> hierarchyParent [
-	^ parent ifNil: [ parent := server ]
+	^ hierarchyParent ifNil: [ hierarchyParent := server ]
 ]
 
 { #category : #accessing }

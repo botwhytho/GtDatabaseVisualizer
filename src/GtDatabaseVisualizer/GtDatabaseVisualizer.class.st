@@ -30,7 +30,7 @@ GtDatabaseVisualizer class >> postgres [
 
 { #category : #accessing }
 GtDatabaseVisualizer >> hierarchyChildren [
-	^ children ifNil: [ children := self servers ]
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self servers ]
 ]
 
 { #category : #accessing }

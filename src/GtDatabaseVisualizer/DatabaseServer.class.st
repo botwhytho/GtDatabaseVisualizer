@@ -75,12 +75,12 @@ DatabaseServer >> getDatabases [
 
 { #category : #accessing }
 DatabaseServer >> hierarchyChildren [
-	^ children ifNil: [ children := self databases ]
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self databases ]
 ]
 
 { #category : #accessing }
 DatabaseServer >> hierarchyParent [
-	^ parent ifNil: [ parent := GtDatabaseVisualizer uniqueInstance ]
+	^ hierarchyParent ifNil: [ hierarchyParent := GtDatabaseVisualizer uniqueInstance ]
 ]
 
 { #category : #initialization }

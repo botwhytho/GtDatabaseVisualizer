@@ -29,7 +29,7 @@ DatabaseColumnAttribute >> hierarchyChildren [
 
 { #category : #accessing }
 DatabaseColumnAttribute >> hierarchyParent [
-	^ parent ifNil: [ parent := self column ]
+	^ hierarchyParent ifNil: [ hierarchyParent := self column ]
 ]
 
 { #category : #accessing }

@@ -49,12 +49,12 @@ DatabaseColumn >> getColumnAttributes [
 
 { #category : #accessing }
 DatabaseColumn >> hierarchyChildren [
-	^ children ifNil: [ children := self attributes ]
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self attributes ]
 ]
 
 { #category : #accessing }
 DatabaseColumn >> hierarchyParent [
-	^ parent ifNil: [ parent := table ]
+	^ hierarchyParent ifNil: [ hierarchyParent := table ]
 ]
 
 { #category : #accessing }

@@ -35,12 +35,12 @@ DatabaseTable >> getColumns [
 
 { #category : #accessing }
 DatabaseTable >> hierarchyChildren [
-	^ children ifNil: [ children := self columns ]
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self columns ]
 ]
 
 { #category : #accessing }
 DatabaseTable >> hierarchyParent [
-	^ parent ifNil: [ parent := schema ]
+	^ hierarchyParent ifNil: [ hierarchyParent := schema ]
 ]
 
 { #category : #accessing }

@@ -5,7 +5,9 @@ Class {
 	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'attributes',
-		'table'
+		'table',
+		'indexes',
+		'foreignKeys'
 	],
 	#category : #GtDatabaseVisualizer
 }
@@ -27,6 +29,17 @@ DatabaseColumn >> attributes: anObject [
 ]
 
 { #category : #accessing }
+DatabaseColumn >> foreignKeys [
+	^ foreignKeys ifNil: [ foreignKeys := OrderedCollection new ]
+]
+
+{ #category : #accessing }
+DatabaseColumn >> foreignKeys: anObject [
+
+	foreignKeys := anObject
+]
+
+{ #category : #accessing }
 DatabaseColumn >> getColumnAttributes [
 	^ self
 		getEntitiesWithArgs: {self table schema name.
@@ -42,6 +55,17 @@ DatabaseColumn >> hierarchyChildren [
 { #category : #accessing }
 DatabaseColumn >> hierarchyParent [
 	^ parent ifNil: [ parent := table ]
+]
+
+{ #category : #accessing }
+DatabaseColumn >> indexes [
+	^ indexes ifNil: [ indexes := OrderedCollection new ]
+]
+
+{ #category : #accessing }
+DatabaseColumn >> indexes: anObject [
+
+	indexes := anObject
 ]
 
 { #category : #accessing }

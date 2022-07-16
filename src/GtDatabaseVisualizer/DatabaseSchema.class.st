@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'TGtDatabaseEntity classTrait + TObjectHierarchy classTrait',
 	#instVars : [
 		'database',
-		'tables'
+		'tables',
+		'foreignKeys'
 	],
 	#category : #GtDatabaseVisualizer
 }
@@ -25,6 +26,17 @@ DatabaseSchema >> database [
 DatabaseSchema >> database: anObject [
 
 	database := anObject
+]
+
+{ #category : #accessing }
+DatabaseSchema >> foreignKeys [
+	^ foreignKeys ifNil: [ foreignKeys := OrderedCollection new ]
+]
+
+{ #category : #accessing }
+DatabaseSchema >> foreignKeys: anObject [
+
+	foreignKeys := anObject
 ]
 
 { #category : #accessing }

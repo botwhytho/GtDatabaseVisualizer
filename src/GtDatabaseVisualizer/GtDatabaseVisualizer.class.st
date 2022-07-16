@@ -34,6 +34,11 @@ GtDatabaseVisualizer >> hierarchyChildren [
 ]
 
 { #category : #accessing }
+GtDatabaseVisualizer >> hierarchyParent [
+	^ nil
+]
+
+{ #category : #accessing }
 GtDatabaseVisualizer >> servers [
 	^ servers ifNil: [ servers := OrderedCollection new ]
 ]

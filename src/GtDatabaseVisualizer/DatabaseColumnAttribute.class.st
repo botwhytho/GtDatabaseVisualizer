@@ -23,6 +23,11 @@ DatabaseColumnAttribute >> column: anObject [
 ]
 
 { #category : #accessing }
+DatabaseColumnAttribute >> hierarchyChildren [
+	^ nil
+]
+
+{ #category : #accessing }
 DatabaseColumnAttribute >> hierarchyParent [
 	^ parent ifNil: [ parent := self column ]
 ]

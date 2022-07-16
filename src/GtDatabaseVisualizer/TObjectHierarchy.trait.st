@@ -26,7 +26,7 @@ TObjectHierarchy >> gtHierarchyFor: aView [
 
 { #category : #accessing }
 TObjectHierarchy >> hierarchyChildren [
-	^ children
+	^ self shouldBeImplemented
 ]
 
 { #category : #accessing }
@@ -36,7 +36,7 @@ TObjectHierarchy >> hierarchyChildren: anObject [
 
 { #category : #accessing }
 TObjectHierarchy >> hierarchyParent [
-	^ parent
+	self shouldBeImplemented
 ]
 
 { #category : #accessing }

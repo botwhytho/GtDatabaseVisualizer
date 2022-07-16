@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #accessing }
+DatabaseTable class >> columnClass [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
 DatabaseTable >> columns [
 	^ columns ifNil: [ columns := OrderedCollection new ]
 ]
@@ -40,7 +45,19 @@ DatabaseTable >> hierarchyParent [
 
 { #category : #accessing }
 DatabaseTable >> populateColumns [
-	self subclassResponsibility
+	| columnQueryResult |
+	columnQueryResult := self getColumns.
+	columnQueryResult rows
+		associationsDo: [ :aColumn | 
+			self columns
+				add: (self class columnClass new
+						name: aColumn key;
+						client: self client;
+						table: self;
+						queryResult: (TransformedQueryResult new
+								columnHeaders: columnQueryResult columnHeaders;
+								rows: aColumn value);
+						populateColumnAttributes) ]
 ]
 
 { #category : #accessing }

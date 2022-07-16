@@ -24,6 +24,11 @@ GtDatabaseVisualizer class >> gtDatabasesFor: aView [
 ]
 
 { #category : #accessing }
+GtDatabaseVisualizer class >> postgres [
+	^ PostgresDatabaseServer
+]
+
+{ #category : #accessing }
 GtDatabaseVisualizer >> hierarchyChildren [
 	^ children ifNil: [ children := self servers ]
 ]

@@ -9,15 +9,8 @@ Class {
 }
 
 { #category : #accessing }
-PostgresDatabaseSchema >> allColumns [
-	| allColumnsInSchema |
-	allColumnsInSchema := 'SELECT "table_name", column_name, ordinal_position, column_default, is_nullable, data_type
-FROM information_schema.columns
-WHERE table_schema = $1
-ORDER BY "table_name", ordinal_position'.
-	^ allColumns
-		ifNil: [ allColumns := client class
-					toDictionaries: (client query: allColumnsInSchema withArguments: {name}) ]
+PostgresDatabaseSchema class >> tableClass [
+	^ PostgresDatabaseTable
 ]
 
 { #category : #accessing }
@@ -43,28 +36,4 @@ PostgresDatabaseSchema >> allForeignKeys [
 
 { #category : #accessing }
 PostgresDatabaseSchema >> allIndexes [
-]
-
-{ #category : #accessing }
-PostgresDatabaseSchema >> populateTables [
-	| tableNames tableNameColumn |
-	"tableNames := self client class toDictionaries: self getTables."
-	tableNames := self getTables.
-	tableNameColumn := tableNames columnNames indexOf: 'name'.
-	tableNames data
-		do: [ :aTable | 
-			self tables
-				add: (PostgresDatabaseTable new
-						name: (aTable at: tableNameColumn);
-						client: self client;
-						schema: self;
-						populateColumns) ].
-	self allForeignKeys.
-	self allIndexes
-]
-
-{ #category : #accessing }
-PostgresDatabaseSchema >> query [
-	^ query
-		ifNil: [ query := 'SELECT tablename AS name FROM pg_catalog.pg_tables WHERE schemaname = $1 ORDER BY tablename' ]
 ]

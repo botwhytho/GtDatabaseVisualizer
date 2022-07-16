@@ -9,6 +9,16 @@ Class {
 }
 
 { #category : #accessing }
+DatabaseConnector class >> fromConnectionString: aConnectionString [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
+DatabaseConnector class >> fromConnectionString: aConnectionString withShortName: aShortName [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
 DatabaseConnector >> client [
 
 	^ client
@@ -18,6 +28,11 @@ DatabaseConnector >> client [
 DatabaseConnector >> client: anObject [
 
 	client := anObject
+]
+
+{ #category : #accessing }
+DatabaseConnector >> close [
+	client close
 ]
 
 { #category : #accessing }

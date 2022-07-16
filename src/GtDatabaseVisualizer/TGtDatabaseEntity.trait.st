@@ -73,9 +73,9 @@ TGtDatabaseEntity >> queryResult: anObject [
 
 { #category : #accessing }
 TGtDatabaseEntity >> transformQueryResult: aQueryResult [
-	"This is responsible for transforming different SQL client results into a generic format having a `headers` array & a `rows` array of arrays"
+	"This is responsible for transforming different SQL client results into a generic format returning a `TransformedQueryResult` that has an array of `columnHeaders` & and a `rows` array of arrays"
 
-	self subclassResponsibility
+	^ self shouldBeImplemented
 ]
 
 { #category : #accessing }

@@ -5,22 +5,21 @@ Class {
 }
 
 { #category : #accessing }
-PostgresDatabaseInstance >> populateSchemas [
-	| schameNameColumn schemaNames |
-	"schemaNames := self client class toDictionaries: self getSchemas."
-	schemaNames := self getSchemas.
-	schameNameColumn := schemaNames columnNames indexOf: 'name'.
-	schemaNames data
-		do: [ :aSchema | 
-			self schemas
-				add: (PostgresDatabaseSchema new
-						name: (aSchema at: schameNameColumn);
-						client: self client;
-						database: self;
-						populateTables) ]
+PostgresDatabaseInstance class >> schemaClass [
+	^ PostgresDatabaseSchema
 ]
 
 { #category : #accessing }
 PostgresDatabaseInstance >> query [
-	^ query ifNil: [ query := 'SELECT nspname as name FROM pg_namespace ORDER BY nspname' ]
+	^ query
+		ifNil: [ query := 'SELECT table_schema AS schema_name, table_name, column_name, ordinal_position, column_default, is_nullable, data_type
+FROM information_schema.columns
+ORDER BY table_schema, table_name, ordinal_position' ]
+]
+
+{ #category : #accessing }
+PostgresDatabaseInstance >> transformQueryResult: aQueryResult [
+	^ TransformedQueryResult new
+		columnHeaders: aQueryResult columnNames;
+		rows: aQueryResult data
 ]

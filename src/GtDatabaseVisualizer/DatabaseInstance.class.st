@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #accessing }
+DatabaseInstance class >> schemaClass [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
 DatabaseInstance >> getSchemas [
 	^ self getEntitiesWithArgs: nil
 ]
@@ -27,7 +32,33 @@ DatabaseInstance >> hierarchyParent [
 
 { #category : #accessing }
 DatabaseInstance >> populateSchemas [
-	self subclassResponsibility
+	| groupedEntites schemaQueryResult |
+	schemaQueryResult := self getSchemas.
+	groupedEntites := schemaQueryResult rows
+			groupedBy: [ :row | row at: (schemaQueryResult columnHeaders indexOf: 'schema_name') ].
+	groupedEntites
+		associationsDo: [ :each | 
+			each
+				value: (each value
+						groupedBy: [ :row | row at: (schemaQueryResult columnHeaders indexOf: 'table_name') ]) ].
+	groupedEntites
+		do: [ :each | 
+			each
+				associationsDo: [ :inner | 
+					inner
+						value: (inner value
+								groupedBy: [ :row | row at: (schemaQueryResult columnHeaders indexOf: 'column_name') ]) ] ].
+	groupedEntites
+		associationsDo: [ :aSchema | 
+			self schemas
+				add: (self class schemaClass new
+						name: aSchema key;
+						client: self client;
+						database: self;
+						queryResult: (TransformedQueryResult new
+								columnHeaders: schemaQueryResult columnHeaders;
+								rows: aSchema value);
+						populateTables) ]
 ]
 
 { #category : #accessing }

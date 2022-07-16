@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : #accessing }
+DatabaseSchema class >> tableClass [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
 DatabaseSchema >> database [
 
 	^ database
@@ -41,7 +46,21 @@ DatabaseSchema >> hierarchyParent [
 
 { #category : #accessing }
 DatabaseSchema >> populateTables [
-	self subclassResponsibility
+	| tableQueryResult |
+	tableQueryResult := self getTables.
+	tableQueryResult rows
+		associationsDo: [ :aTable | 
+			self tables
+				add: (self class tableClass new
+						name: aTable key;
+						client: self client;
+						schema: self;
+						queryResult: (TransformedQueryResult new
+								columnHeaders: tableQueryResult columnHeaders;
+								rows: aTable value);
+						populateColumns) ].
+	self allForeignKeys.
+	"self allIndexes"
 ]
 
 { #category : #accessing }

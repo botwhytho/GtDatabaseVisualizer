@@ -46,8 +46,7 @@ DatabaseServer class >> populateInBackground: aDatabaseServer [
 	| thisCoder |
 	thisCoder := (thisContext stack
 			detect: [ :each | each contextClass = GtPharoSourceCoder ]) receiver.
-	[ self inform: 'Beginning import.'.
-	[ aDatabaseServer populateDatabases ]
+	[ [ aDatabaseServer populateDatabases ]
 		ensure: [ aDatabaseServer client closeConnection ].
 	self inform: 'Finished import.'.
 	thisCoder

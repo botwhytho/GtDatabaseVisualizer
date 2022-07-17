@@ -16,25 +16,16 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 		title: 'Table Neighbors';
 		priority: 1;
 		painting: [ :aMondrian | 
-			| connections tableRelationships view |
-			tableRelationships := self schema allForeignKeys
-					collect: [ :each | 
-						(self schema tables detect: [ :inner | inner name = each table_name ])
-							-> (self schema tables detect: [ :inner | inner name = each foreign_table_name ]) ].
-			connections := self schema allForeignKeys
-					collect: [ :each | 
-						((self schema tables detect: [ :inner | inner name = each table_name ]) columns
-							detect: [ :inner | inner name = each column_name ])
-							-> ((self schema tables detect: [ :inner | inner name = each foreign_table_name ])
-									columns detect: [ :inner | inner name = each foreign_column_name ]) ].
+			| view |
 			view := aMondrian.
 			view nodes
 				stencil: [ :each | GtMondrianUMLClassElement withDefaultContainer label: each name ];
-				with: (tableRelationships
-							select: [ :each | each key = self or: [ each value = self ] ]
-							thenCollect: [ :each | 
-								{each key.
-									each value} ]) flattened asSet
+				with: ((self columns flatCollect: #foreignKeys)
+							inject: #()
+							into: [ :sum :each | 
+								sum
+									, {each table.
+											each foreignTable} ]) asSet
 					forEach: [ :table | 
 						view nodes
 							shape: [ :x | 
@@ -46,9 +37,9 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 			"Invisible edges that affect the tree layout."
 			view edges
 				shape: [ :x | BlLineElement new ];
-				connect: tableRelationships
-					from: [ :each | each key ]
-					to: [ :each | each value ].
+				connect: self schema foreignKeys
+					from: [ :each | each table ]
+					to: [ :each | each foreignTable ].
 			"Visible edges that are 'passive' and don't affect the tree layout."
 			view edges
 				fromRightCenter;
@@ -62,9 +53,9 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 								border: (BlBorder paint: (Color blue alpha: 0.5) width: 15));
 						zIndex: -1 ];
 				passive;
-				connect: connections
-					from: [ :each | each key ]
-					to: [ :each | each value ].
+				connect: self schema foreignKeys
+					from: [ :each | each column ]
+					to: [ :each | each foreignColumn ].
 			view layout horizontalDominanceTree
 				levelDistance: 150;
 				nodeDistance: 25;
@@ -78,17 +69,7 @@ PostgresDatabaseTable >> gtTableRelationsFor: aView [
 		title: 'All Table Relationships';
 		priority: 2;
 		painting: [ :aMondrian | 
-			| connections tableRelationships view |
-			tableRelationships := self schema allForeignKeys
-					collect: [ :each | 
-						(self schema tables detect: [ :inner | inner name = each table_name ])
-							-> (self schema tables detect: [ :inner | inner name = each foreign_table_name ]) ].
-			connections := self schema allForeignKeys
-					collect: [ :each | 
-						((self schema tables detect: [ :inner | inner name = each table_name ]) columns
-							detect: [ :inner | inner name = each column_name ])
-							-> ((self schema tables detect: [ :inner | inner name = each foreign_table_name ])
-									columns detect: [ :inner | inner name = each foreign_column_name ]) ].
+			| view |
 			view := aMondrian.
 			view nodes
 				stencil: [ :each | GtMondrianUMLClassElement withDefaultContainer label: each name ];
@@ -104,9 +85,9 @@ PostgresDatabaseTable >> gtTableRelationsFor: aView [
 			"Invisible edges that affect the tree layout."
 			view edges
 				shape: [ :x | BlLineElement new ];
-				connect: tableRelationships
-					from: [ :each | each key ]
-					to: [ :each | each value ].
+				connect: self schema foreignKeys
+					from: [ :each | each table ]
+					to: [ :each | each foreignTable ].
 			"Visible edges that are 'passive' and don't affect the tree layout."
 			view edges
 				fromRightCenter;
@@ -120,14 +101,14 @@ PostgresDatabaseTable >> gtTableRelationsFor: aView [
 								border: (BlBorder paint: (Color blue alpha: 0.5) width: 15));
 						zIndex: -1 ];
 				passive;
-				connect: connections
-					from: [ :each | each key ]
-					to: [ :each | each value ].
-			view layout "force
-				strength: 0.10;
-				charge: -2500;
-				length: 150."horizontalDominanceTree
+				connect: self schema foreignKeys
+					from: [ :each | each column ]
+					to: [ :each | each foreignColumn ].
+			view layout horizontalDominanceTree
 				levelDistance: 150;
 				nodeDistance: 25;
-				treesDistance: 75 ]
+				treesDistance: 75	"force
+				strength: 0.10;
+				charge: -2500;
+				length: 150." ]
 ]

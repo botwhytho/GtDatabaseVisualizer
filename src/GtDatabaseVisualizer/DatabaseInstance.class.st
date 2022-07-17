@@ -26,6 +26,11 @@ DatabaseInstance >> allForeignKeys [
 ]
 
 { #category : #accessing }
+DatabaseInstance >> allIndexes [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
 DatabaseInstance >> getSchemas [
 	^ self getEntitiesWithArgs: nil
 ]
@@ -69,37 +74,27 @@ DatabaseInstance >> populateForeignKeys [
 	foreignKeyQueryResult := self getEntitiesWithArgs: nil.
 	foreignKeyQueryResult rows
 		do: [ :row | 
-			| column foreignColumn foreignKey foreignTable schema table |
-			schema := self schemas
-					detect: [ :each | 
-						each name
-							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name')) ].
-			table := schema tables
-					detect: [ :each | 
-						each name
-							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'table_name')) ].
-			column := table columns
-					detect: [ :each | 
-						each name
-							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'column_name')) ].
-			foreignTable := schema tables
-					detect: [ :each | 
-						each name
-							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_table_name')) ].
-			foreignColumn := foreignTable columns
-					detect: [ :each | 
-						each name
-							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_column_name')) ].
+			| column foreignColumn foreignKey |
+			column := self
+					findNestedChildByName: {
+							row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name').
+							row at: (foreignKeyQueryResult columnHeaders indexOf: 'table_name').
+							row at: (foreignKeyQueryResult columnHeaders indexOf: 'column_name')}.
+			foreignColumn := self
+					findNestedChildByName: {
+							row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name').
+							row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_table_name').
+							row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_column_name')}.
 			foreignKey := self class foreignKeyClass new
 					name: (row at: (foreignKeyQueryResult columnHeaders indexOf: 'constraint_name'));
 					client: self client;
-					table: table;
+					table: column table;
 					column: column;
-					foreignTable: foreignTable;
+					foreignTable: foreignColumn table;
 					foreignColumn: foreignColumn.
 			column foreignKeys add: foreignKey.
 			foreignColumn foreignKeys add: foreignKey.
-			schema foreignKeys add: foreignKey ]
+			column table schema foreignKeys add: foreignKey ]
 ]
 
 { #category : #accessing }

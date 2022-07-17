@@ -7,6 +7,28 @@ Trait {
 	#category : #GtDatabaseVisualizer
 }
 
+{ #category : #accessing }
+TObjectHierarchy >> findNestedChildByName: anArrayOfNames [
+	"Return nested child (or nil) by recursively searching children collections by provided names in order"
+
+	anArrayOfNames ifEmpty: [ ^ nil ].
+	^ anArrayOfNames allButFirst
+		ifEmpty: [ self hierarchyChildren
+				ifNil: [ nil ]
+				ifNotNil: [ :collection | 
+					collection
+						detect: [ :each | [ each name = anArrayOfNames first ] on: SubscriptOutOfBounds do: [ nil ] ]
+						ifNone: [ nil ] ] ]
+		ifNotEmpty: [ :rest | 
+			self hierarchyChildren
+				ifNil: [ nil ]
+				ifNotNil: [ :collection | 
+					collection
+						detect: [ :each | each name = anArrayOfNames first ]
+						ifFound: [ :found | found findNestedChildByName: rest ]
+						ifNone: [ nil ] ] ]
+]
+
 { #category : #view }
 TObjectHierarchy >> gtHierarchyFor: aView [
 	<gtView>

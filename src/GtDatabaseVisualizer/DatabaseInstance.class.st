@@ -86,11 +86,12 @@ DatabaseInstance >> populateForeignKeys [
 					detect: [ :each | 
 						each name
 							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_table_name')) ].
-			foreignColumn := table columns
+			foreignColumn := foreignTable columns
 					detect: [ :each | 
 						each name
 							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_column_name')) ].
 			foreignKey := self class foreignKeyClass new
+					name: (row at: (foreignKeyQueryResult columnHeaders indexOf: 'constraint_name'));
 					client: self client;
 					table: table;
 					column: column;

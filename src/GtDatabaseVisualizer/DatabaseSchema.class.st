@@ -70,9 +70,7 @@ DatabaseSchema >> populateTables [
 						queryResult: (TransformedQueryResult new
 								columnHeaders: tableQueryResult columnHeaders;
 								rows: aTable value);
-						populateColumns) ].
-	self allForeignKeys.
-	"self allIndexes"
+						populateColumns) ]
 ]
 
 { #category : #accessing }

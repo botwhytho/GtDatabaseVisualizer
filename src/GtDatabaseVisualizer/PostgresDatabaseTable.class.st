@@ -36,7 +36,7 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 						view layout vertical ].
 			"Invisible edges that affect the tree layout."
 			view edges
-				shape: [ :x | BlLineElement new ];
+				stencil: [ BlLineElement new ];
 				connect: self schema foreignKeys
 					from: [ :each | each table ]
 					to: [ :each | each foreignTable ].
@@ -44,14 +44,23 @@ PostgresDatabaseTable >> gtTableNeighborsFor: aView [
 			view edges
 				fromRightCenter;
 				toLeftCenter;
-				stencil: [ BlSigmoidElement new
-						border: (BlBorder paint: (Color gray alpha: 0.5) width: 1);
+				stencil: [ :aForeignKey :fromElement :toElement | 
+					BlSigmoidElement new
+						border: (BlBorder paint: (Color gray alpha: 0.5) width: 2);
 						constraintsDo: [ :c | c ignoreByLayout ];
 						toHead: (BlArrowheadSimpleArrow new
 								arrowLengthFraction: 10;
 								background: (Color blue alpha: 0.5);
-								border: (BlBorder paint: (Color blue alpha: 0.5) width: 15));
-						zIndex: -1 ];
+								border: (BlBorder paint: (Color blue alpha: 0.5) width: 15);
+								when: BlClickEvent
+									do: [ :anEvent | 
+										anEvent consumed: true.
+										anEvent currentTarget phlow spawnObject: aForeignKey ]);
+						zIndex: -1;
+						when: BlClickEvent
+							do: [ :anEvent | 
+								anEvent consumed: true.
+								anEvent currentTarget phlow spawnObject: aForeignKey ] ];
 				passive;
 				connect: self schema foreignKeys
 					from: [ :each | each column ]

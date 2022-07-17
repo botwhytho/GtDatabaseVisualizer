@@ -26,10 +26,8 @@ TGtDatabaseEntity >> client: anObject [
 TGtDatabaseEntity >> getEntitiesWithArgs: argsArrayOrNil [
 	^ queryResult
 		ifNil: [ valuable
-				ifNil: [ argsArrayOrNil
-						ifNil: [ self transformQueryResult: (client query: self query) ]
-						ifNotNil: [ self
-								transformQueryResult: (client query: (self query withArguments: argsArrayOrNil)) ] ]
+				ifNil: [ self
+						transformQueryResult: (client query: self query withArguments: argsArrayOrNil) ]
 				ifNotNil: [ argsArrayOrNil
 						ifNil: [ valuable value ]
 						ifNotNil: [ valuable valueWithArguments: argsArrayOrNil ] ] ]

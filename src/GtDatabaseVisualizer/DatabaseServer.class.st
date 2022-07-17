@@ -48,7 +48,7 @@ DatabaseServer class >> populateInBackground: aDatabaseServer [
 			detect: [ :each | each contextClass = GtPharoSourceCoder ]) receiver.
 	[ self inform: 'Beginning import.'.
 	[ aDatabaseServer populateDatabases ]
-		ensure: [ aDatabaseServer client close ].
+		ensure: [ aDatabaseServer client closeConnection ].
 	self inform: 'Finished import.'.
 	thisCoder
 		notifyToolSpawn: (GtInspectorTool forObject: aDatabaseServer)
@@ -105,7 +105,8 @@ DatabaseServer >> populateDatabases [
 								name: (aDatabase at: databaseNameColumn);
 								client: self client;
 								server: self;
-								populateSchemas) ] ]
+								populateSchemas) ] ].
+	"self query: self allForeignKeys."
 ]
 
 { #category : #accessing }

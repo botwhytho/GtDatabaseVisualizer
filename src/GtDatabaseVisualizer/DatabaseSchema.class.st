@@ -41,7 +41,7 @@ DatabaseSchema >> foreignKeys: anObject [
 
 { #category : #accessing }
 DatabaseSchema >> getTables [
-	^ self getEntitiesWithArgs: {self name}
+	^ self getEntitiesWithArgs: nil
 ]
 
 { #category : #accessing }

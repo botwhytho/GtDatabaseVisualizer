@@ -11,7 +11,17 @@ Class {
 }
 
 { #category : #accessing }
+DatabaseInstance class >> foreignKeyClass [
+	^ DatabaseForeignKey
+]
+
+{ #category : #accessing }
 DatabaseInstance class >> schemaClass [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
+DatabaseInstance >> allForeignKeys [
 	self subclassResponsibility
 ]
 
@@ -21,19 +31,10 @@ DatabaseInstance >> getSchemas [
 ]
 
 { #category : #accessing }
-DatabaseInstance >> hierarchyChildren [
-	^ hierarchyChildren ifNil: [ hierarchyChildren := self schemas ]
-]
+DatabaseInstance >> groupQueryResult: schemaQueryResult [
+	"This turns rows that have 'schema_name', 'tatble_name', 'column_name' and an arbitraty number of additional columns into nested Dictionaries to assist with turning those rows into domain objects"
 
-{ #category : #accessing }
-DatabaseInstance >> hierarchyParent [
-	^ hierarchyParent ifNil: [ hierarchyParent := server ]
-]
-
-{ #category : #accessing }
-DatabaseInstance >> populateSchemas [
-	| groupedEntites schemaQueryResult |
-	schemaQueryResult := self getSchemas.
+	| groupedEntites |
 	groupedEntites := schemaQueryResult rows
 			groupedBy: [ :row | row at: (schemaQueryResult columnHeaders indexOf: 'schema_name') ].
 	groupedEntites
@@ -48,6 +49,63 @@ DatabaseInstance >> populateSchemas [
 					inner
 						value: (inner value
 								groupedBy: [ :row | row at: (schemaQueryResult columnHeaders indexOf: 'column_name') ]) ] ].
+	^ groupedEntites
+]
+
+{ #category : #accessing }
+DatabaseInstance >> hierarchyChildren [
+	^ hierarchyChildren ifNil: [ hierarchyChildren := self schemas ]
+]
+
+{ #category : #accessing }
+DatabaseInstance >> hierarchyParent [
+	^ hierarchyParent ifNil: [ hierarchyParent := server ]
+]
+
+{ #category : #accessing }
+DatabaseInstance >> populateForeignKeys [
+	| foreignKeyQueryResult |
+	self query: self allForeignKeys.
+	foreignKeyQueryResult := self getEntitiesWithArgs: nil.
+	foreignKeyQueryResult rows
+		do: [ :row | 
+			| column foreignColumn foreignKey foreignTable schema table |
+			schema := self schemas
+					detect: [ :each | 
+						each name
+							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name')) ].
+			table := schema tables
+					detect: [ :each | 
+						each name
+							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'table_name')) ].
+			column := table columns
+					detect: [ :each | 
+						each name
+							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'column_name')) ].
+			foreignTable := schema tables
+					detect: [ :each | 
+						each name
+							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_table_name')) ].
+			foreignColumn := table columns
+					detect: [ :each | 
+						each name
+							= (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_column_name')) ].
+			foreignKey := self class foreignKeyClass new
+					client: self client;
+					table: table;
+					column: column;
+					foreignTable: foreignTable;
+					foreignColumn: foreignColumn.
+			column foreignKeys add: foreignKey.
+			foreignColumn foreignKeys add: foreignKey.
+			schema foreignKeys add: foreignKey ]
+]
+
+{ #category : #accessing }
+DatabaseInstance >> populateSchemas [
+	| groupedEntites schemaQueryResult |
+	schemaQueryResult := self getSchemas.
+	groupedEntites := self groupQueryResult: schemaQueryResult.
 	groupedEntites
 		associationsDo: [ :aSchema | 
 			self schemas
@@ -58,7 +116,8 @@ DatabaseInstance >> populateSchemas [
 						queryResult: (TransformedQueryResult new
 								columnHeaders: schemaQueryResult columnHeaders;
 								rows: aSchema value);
-						populateTables) ]
+						populateTables) ].
+	self populateForeignKeys.
 ]
 
 { #category : #accessing }

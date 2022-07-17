@@ -42,14 +42,13 @@ DatabaseColumn >> foreignKeys: anObject [
 { #category : #accessing }
 DatabaseColumn >> getColumnAttributes [
 	^ self
-		getEntitiesWithArgs: {self table schema name.
-				self table name.
-				self name}
+		getEntitiesWithArgs: nil
 ]
 
 { #category : #accessing }
 DatabaseColumn >> hierarchyChildren [
-	^ hierarchyChildren ifNil: [ hierarchyChildren := self attributes ]
+	^ hierarchyChildren
+		ifNil: [ hierarchyChildren := self attributes , self indexes , self foreignKeys ]
 ]
 
 { #category : #accessing }

@@ -28,9 +28,7 @@ DatabaseTable >> columns: anObject [
 
 { #category : #accessing }
 DatabaseTable >> getColumns [
-	^ self
-		getEntitiesWithArgs: {self schema name.
-				self name}
+	^ self getEntitiesWithArgs: nil
 ]
 
 { #category : #accessing }

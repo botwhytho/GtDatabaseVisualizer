@@ -45,9 +45,14 @@ PostgresDatabaseConnector >> query: aString [
 
 { #category : #accessing }
 PostgresDatabaseConnector >> query: aString withArguments: args [
-	| statement |
-	statement := client "prepare"format: aString.
-	^ client in: [ :p3Client | "[" statement query: args "] ensure: [ client close ]" ]
+	| hash statement |
+	args
+		ifNil: [ ^ client query: aString ]
+		ifNotNil: [ hash := (MD5 hashMessage: aString) hex.
+			[ statement := client preparedStatementNamed: hash ]
+				on: NotFound
+				do: [ statement := client prepare: aString named: hash ].
+			^ statement query: args ]
 ]
 
 { #category : #accessing }

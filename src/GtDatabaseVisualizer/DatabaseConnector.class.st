@@ -31,11 +31,6 @@ DatabaseConnector >> client: anObject [
 ]
 
 { #category : #accessing }
-DatabaseConnector >> close [
-	client close
-]
-
-{ #category : #accessing }
 DatabaseConnector >> closeConnection [
 	self subclassResponsibility
 ]

@@ -16,6 +16,11 @@ DatabaseInstance class >> foreignKeyClass [
 ]
 
 { #category : #accessing }
+DatabaseInstance class >> indexClass [
+	^ DatabaseColumnIndex
+]
+
+{ #category : #accessing }
 DatabaseInstance class >> schemaClass [
 	self subclassResponsibility
 ]
@@ -98,6 +103,32 @@ DatabaseInstance >> populateForeignKeys [
 ]
 
 { #category : #accessing }
+DatabaseInstance >> populateIndexes [
+	| columnHeaders indexQueryResult |
+	self query: self allIndexes.
+	indexQueryResult := self getEntitiesWithArgs: nil.
+	columnHeaders := indexQueryResult columnHeaders.
+	indexQueryResult rows
+		do: [ :row | 
+			| table columns columnIndex |
+			table := self
+					findNestedChildByName: {row at: (columnHeaders indexOf: 'schema_name').
+							row at: (columnHeaders indexOf: 'table_name')}.
+			columns := ($; split: (row at: (columnHeaders indexOf: 'column_names')))
+					collect: [ :each | table findNestedChildByName: {each} ].
+			columnIndex := self class indexClass new
+					name: (row at: (columnHeaders indexOf: 'index_name'));
+					client: self client;
+					columns: columns;
+					unique: (row at: (columnHeaders indexOf: 'is_unique'));
+					primary: (row at: (columnHeaders indexOf: 'is_primary'));
+					definition: (row at: (columnHeaders indexOf: 'index_definition'));
+					algorithm: ('USING'
+							split: (row at: (columnHeaders indexOf: 'index_definition')) second substrings first).
+			columns do: [ :each | each indexes add: columnIndex ] ]
+]
+
+{ #category : #accessing }
 DatabaseInstance >> populateSchemas [
 	| groupedEntites schemaQueryResult |
 	schemaQueryResult := self getSchemas.
@@ -113,6 +144,7 @@ DatabaseInstance >> populateSchemas [
 								columnHeaders: schemaQueryResult columnHeaders;
 								rows: aSchema value);
 						populateTables) ].
+	self populateIndexes.
 	self populateForeignKeys.
 ]
 

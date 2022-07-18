@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'database',
 		'tables',
-		'foreignKeys'
+		'foreignKeys',
+		'indexes'
 	],
 	#category : #GtDatabaseVisualizer
 }
@@ -54,6 +55,17 @@ DatabaseSchema >> hierarchyChildren [
 { #category : #accessing }
 DatabaseSchema >> hierarchyParent [
 	^ hierarchyParent ifNil: [ hierarchyParent := database ]
+]
+
+{ #category : #accessing }
+DatabaseSchema >> indexes [
+	^ indexes ifNil: [ indexes := OrderedCollection new ]
+]
+
+{ #category : #accessing }
+DatabaseSchema >> indexes: anObject [
+
+	indexes := anObject
 ]
 
 { #category : #accessing }

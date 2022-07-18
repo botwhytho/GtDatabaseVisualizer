@@ -114,18 +114,20 @@ DatabaseInstance >> populateIndexes [
 			table := self
 					findNestedChildByName: {row at: (columnHeaders indexOf: 'schema_name').
 							row at: (columnHeaders indexOf: 'table_name')}.
-			columns := ($; split: (row at: (columnHeaders indexOf: 'column_names')))
-					collect: [ :each | table findNestedChildByName: {each} ].
-			columnIndex := self class indexClass new
-					name: (row at: (columnHeaders indexOf: 'index_name'));
-					client: self client;
-					columns: columns;
-					unique: (row at: (columnHeaders indexOf: 'is_unique'));
-					primary: (row at: (columnHeaders indexOf: 'is_primary'));
-					definition: (row at: (columnHeaders indexOf: 'index_definition'));
-					algorithm: ('USING'
-							split: (row at: (columnHeaders indexOf: 'index_definition')) second substrings first).
-			columns do: [ :each | each indexes add: columnIndex ] ]
+			table
+				ifNotNil: [ columns := ($; split: (row at: (columnHeaders indexOf: 'column_names')))
+							collect: [ :each | table findNestedChildByName: {each} ].
+					columnIndex := self class indexClass new
+							name: (row at: (columnHeaders indexOf: 'index_name'));
+							client: self client;
+							columns: columns;
+							unique: (row at: (columnHeaders indexOf: 'is_unique'));
+							primary: (row at: (columnHeaders indexOf: 'is_primary'));
+							definition: (row at: (columnHeaders indexOf: 'index_definition'));
+							algorithm: ('USING' split: (row at: (columnHeaders indexOf: 'index_definition'))) second
+									substrings first.
+					columns do: [ :each | each ifNotNil: [ each indexes add: columnIndex ] ].
+					table schema indexes add: columnIndex ] ]
 ]
 
 { #category : #accessing }

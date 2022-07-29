@@ -5,7 +5,8 @@ Trait {
 		'client',
 		'query',
 		'name',
-		'queryResult'
+		'queryResult',
+		'metadata'
 	],
 	#category : #GtDatabaseVisualizer
 }
@@ -31,6 +32,18 @@ TGtDatabaseEntity >> getEntitiesWithArgs: argsArrayOrNil [
 				ifNotNil: [ argsArrayOrNil
 						ifNil: [ valuable value ]
 						ifNotNil: [ valuable valueWithArguments: argsArrayOrNil ] ] ]
+]
+
+{ #category : #accessing }
+TGtDatabaseEntity >> metadata [
+
+	^ metadata
+]
+
+{ #category : #accessing }
+TGtDatabaseEntity >> metadata: anObject [
+
+	metadata := anObject
 ]
 
 { #category : #accessing }

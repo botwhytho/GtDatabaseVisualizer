@@ -18,6 +18,26 @@ DatabaseColumn class >> columnAttributeClass [
 ]
 
 { #category : #accessing }
+DatabaseColumn >> asRelationsViewElement [
+	| items |
+	items := {BlTextElement new text: self name asRopedText} asOrderedCollection.
+	self indexes
+		ifNotEmpty: [ items addFirst: BrGlamorousVectorIcons up asElement ].
+	self foreignKeys
+		detect: [ :fk | fk foreignColumn = self ]
+		ifFound: [ items addFirst: BrGlamorousVectorIcons right asElement ].
+	self foreignKeys
+		detect: [ :fk | fk column = self ]
+		ifFound: [ items addLast: BrGlamorousVectorIcons right asElement ].
+
+	^ BrHorizontalPane new
+		constraintsDo: [ :c | 
+			c horizontal matchParent.
+			c vertical fitContent ];
+		addChildren: items
+]
+
+{ #category : #accessing }
 DatabaseColumn >> attributes [
 	^ attributes ifNil: [ attributes := OrderedCollection new ]
 ]
@@ -53,7 +73,7 @@ DatabaseColumn >> hierarchyChildren [
 
 { #category : #accessing }
 DatabaseColumn >> hierarchyParent [
-	^ hierarchyParent ifNil: [ hierarchyParent := table ]
+	^ table
 ]
 
 { #category : #accessing }

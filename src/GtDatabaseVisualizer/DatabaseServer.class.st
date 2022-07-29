@@ -79,7 +79,7 @@ DatabaseServer >> hierarchyChildren [
 
 { #category : #accessing }
 DatabaseServer >> hierarchyParent [
-	^ hierarchyParent ifNil: [ hierarchyParent := GtDatabaseVisualizer uniqueInstance ]
+	^ GtDatabaseVisualizer uniqueInstance
 ]
 
 { #category : #initialization }

@@ -50,10 +50,7 @@ DatabaseTable >> gtTableNeighborsFor: aView [
 											each foreignTable} ]) asSet
 					forEach: [ :table | 
 						view nodes
-							shape: [ :x | 
-								BlTextElement new
-									text: x name asRopedText;
-									constraintsDo: [ :c | c horizontal matchParent ] ];
+							shape: [ :x | x asRelationsViewElement ];
 							with: table columns.
 						view layout vertical ].
 			"Invisible edges that affect the tree layout."
@@ -70,14 +67,6 @@ DatabaseTable >> gtTableNeighborsFor: aView [
 					BlSigmoidElement new
 						border: (BlBorder paint: (Color gray alpha: 0.5) width: 2);
 						constraintsDo: [ :c | c ignoreByLayout ];
-						toHead: (BlArrowheadSimpleArrow new
-								arrowLengthFraction: 10;
-								background: (Color blue alpha: 0.5);
-								border: (BlBorder paint: (Color blue alpha: 0.5) width: 15);
-								when: BlClickEvent
-									do: [ :anEvent | 
-										anEvent consumed: true.
-										anEvent currentTarget phlow spawnObject: aForeignKey ]);
 						zIndex: -1;
 						when: BlClickEvent
 							do: [ :anEvent | 
@@ -107,10 +96,7 @@ DatabaseTable >> gtTableRelationsFor: aView [
 				with: schema tables
 					forEach: [ :table | 
 						view nodes
-							shape: [ :x | 
-								BlTextElement new
-									text: x name asRopedText;
-									constraintsDo: [ :c | c horizontal matchParent ] ];
+							shape: [ :x | x asRelationsViewElement ];
 							with: table columns.
 						view layout vertical ].
 			"Invisible edges that affect the tree layout."
@@ -127,14 +113,6 @@ DatabaseTable >> gtTableRelationsFor: aView [
 					BlSigmoidElement new
 						border: (BlBorder paint: (Color gray alpha: 0.5) width: 2);
 						constraintsDo: [ :c | c ignoreByLayout ];
-						toHead: (BlArrowheadSimpleArrow new
-								arrowLengthFraction: 10;
-								background: (Color blue alpha: 0.5);
-								border: (BlBorder paint: (Color blue alpha: 0.5) width: 15));
-						when: BlClickEvent
-							do: [ :anEvent | 
-								anEvent consumed: true.
-								anEvent currentTarget phlow spawnObject: aForeignKey ];
 						zIndex: -1;
 						when: BlClickEvent
 							do: [ :anEvent | 
@@ -160,7 +138,7 @@ DatabaseTable >> hierarchyChildren [
 
 { #category : #accessing }
 DatabaseTable >> hierarchyParent [
-	^ hierarchyParent ifNil: [ hierarchyParent := schema ]
+	^ schema
 ]
 
 { #category : #accessing }

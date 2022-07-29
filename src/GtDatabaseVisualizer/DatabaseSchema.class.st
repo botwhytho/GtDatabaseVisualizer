@@ -54,7 +54,7 @@ DatabaseSchema >> hierarchyChildren [
 
 { #category : #accessing }
 DatabaseSchema >> hierarchyParent [
-	^ hierarchyParent ifNil: [ hierarchyParent := database ]
+	^ database
 ]
 
 { #category : #accessing }

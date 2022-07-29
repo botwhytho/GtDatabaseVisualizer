@@ -69,7 +69,7 @@ DatabaseInstance >> hierarchyChildren [
 
 { #category : #accessing }
 DatabaseInstance >> hierarchyParent [
-	^ hierarchyParent ifNil: [ hierarchyParent := server ]
+	^ server
 ]
 
 { #category : #accessing }

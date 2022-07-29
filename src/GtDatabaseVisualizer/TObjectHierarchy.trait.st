@@ -29,6 +29,18 @@ TObjectHierarchy >> findNestedChildByName: anArrayOfNames [
 						ifNone: [ nil ] ] ]
 ]
 
+{ #category : #accessing }
+TObjectHierarchy >> findParentBySymbol: aSymbol [
+	"Return parent in the hierarchy that understands aSymbol."
+
+	self
+		flag: 'TODO: May clash with other methods with same name, should introspect into return of CompileMethod #hierarchyParent'.
+	self hierarchyParent ifNil: [ ^ nil ].
+	[ ^ self perform: aSymbol ]
+		onDNU: aSymbol
+		do: [ ^ self hierarchyParent findParentBySymbol: aSymbol ]
+]
+
 { #category : #view }
 TObjectHierarchy >> gtHierarchyFor: aView [
 	<gtView>

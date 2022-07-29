@@ -34,6 +34,16 @@ DatabaseForeignKey >> foreignTable: anObject [
 ]
 
 { #category : #accessing }
+DatabaseForeignKey >> gtForeignKeyRelationFor: aView [
+	<gtView>
+	^ (self
+		gtTableRelationsForHelper: aView
+		withTables: {self table . self foreignTable})
+		title: 'Relationship';
+		priority: 1
+]
+
+{ #category : #accessing }
 DatabaseForeignKey >> table [
 
 	^ table

@@ -82,16 +82,16 @@ DatabaseInstance >> populateForeignKeys [
 			| column foreignColumn foreignKey |
 			column := self
 					findNestedChildByName: {
-							row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name').
-							row at: (foreignKeyQueryResult columnHeaders indexOf: 'table_name').
-							row at: (foreignKeyQueryResult columnHeaders indexOf: 'column_name')}.
+							(row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name')) pharoFromJSString.
+							('.' split: (row at: (foreignKeyQueryResult columnHeaders indexOf: 'table_name'))) pharoFromJSString.
+							(row at: (foreignKeyQueryResult columnHeaders indexOf: 'column_name')) pharoFromJSString}.
 			foreignColumn := self
 					findNestedChildByName: {
-							row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name').
-							row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_table_name').
-							row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_column_name')}.
+							(row at: (foreignKeyQueryResult columnHeaders indexOf: 'schema_name')) pharoFromJSString.
+							('.' split: (row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_table_name'))) pharoFromJSString.
+							(row at: (foreignKeyQueryResult columnHeaders indexOf: 'foreign_column_name')) pharoFromJSString}.
 			foreignKey := self class foreignKeyClass new
-					name: (row at: (foreignKeyQueryResult columnHeaders indexOf: 'constraint_name'));
+					name: (row at: (foreignKeyQueryResult columnHeaders indexOf: 'constraint_name')) pharoFromJSString;
 					client: self client;
 					table: column table;
 					column: column;

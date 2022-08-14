@@ -22,7 +22,7 @@ DatabaseColumn >> asRelationsViewElement [
 	| items |
 	items := {BlTextElement new text: self name asRopedText} asOrderedCollection.
 	self indexes
-		ifNotEmpty: [ items addFirst: BrGlamorousVectorIcons up asElement ].
+		ifNotEmpty: [ items addFirst: BrGlamorousVectorIcons emphasizedInspect asElement ].
 	self foreignKeys
 		detect: [ :fk | fk foreignColumn = self ]
 		ifFound: [ items addFirst: BrGlamorousVectorIcons right asElement ].

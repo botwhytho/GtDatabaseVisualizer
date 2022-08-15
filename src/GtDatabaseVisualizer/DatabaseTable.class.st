@@ -51,7 +51,7 @@ DatabaseTable >> gtTableRelationsFor: aView [
 	<gtView>
 	^ (self gtTableRelationsForHelper: aView withTables: schema tables)
 		title: 'All Table Relationship';
-		priority: 1
+		priority: 2
 ]
 
 { #category : #accessing }

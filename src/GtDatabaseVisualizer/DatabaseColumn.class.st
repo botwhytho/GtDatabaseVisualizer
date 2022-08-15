@@ -22,7 +22,7 @@ DatabaseColumn >> asRelationsViewElement [
 	| items |
 	items := {BlTextElement new text: self name asRopedText} asOrderedCollection.
 	self indexes
-		ifNotEmpty: [ items addFirst: BrGlamorousVectorIcons up asElement ].
+		ifNotEmpty: [ items addFirst: BrGlamorousVectorIcons emphasizedInspect asElement ].
 	self foreignKeys
 		detect: [ :fk | fk foreignColumn = self ]
 		ifFound: [ items addFirst: BrGlamorousVectorIcons right asElement ].
@@ -63,6 +63,25 @@ DatabaseColumn >> foreignKeys: anObject [
 DatabaseColumn >> getColumnAttributes [
 	^ self
 		getEntitiesWithArgs: nil
+]
+
+{ #category : #accessing }
+DatabaseColumn >> gtAttributesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Column Attributes';
+		priority: 1;
+		items: [ self attributes , self indexes , self foreignKeys ];
+		column: 'Name' text: [ :aNode :anIndex | aNode name ];
+		column: 'Value'
+			text: [ :aNode :anIndex | 
+				| value |
+				(aNode isKindOf: DatabaseColumnAttribute) ifTrue: [ value := aNode value ].
+				(aNode isKindOf: DatabaseColumnIndex) ifTrue: [ value := aNode definition ].
+				(aNode isKindOf: DatabaseForeignKey)
+					ifTrue: [ value := aNode table name , '.' , aNode column name , ' -> '
+								, aNode foreignTable name , '.' , aNode foreignColumn name ].
+				value ]
 ]
 
 { #category : #accessing }

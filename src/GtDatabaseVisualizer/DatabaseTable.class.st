@@ -40,7 +40,7 @@ DatabaseTable >> gtTableNeighborsFor: aView [
 			into: [ :sum :each | 
 				sum
 					, {each table.
-							each foreignTable} ]) asSet.
+							each foreignTable} ]) asSet , {self}.
 	^ (self gtTableRelationsForHelper: aView withTables: neighboringTables)
 		title: 'Table Neighbors';
 		priority: 1

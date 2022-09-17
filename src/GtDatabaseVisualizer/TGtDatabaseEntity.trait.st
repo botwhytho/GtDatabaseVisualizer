@@ -35,6 +35,28 @@ TGtDatabaseEntity >> getEntitiesWithArgs: argsArrayOrNil [
 ]
 
 { #category : #accessing }
+TGtDatabaseEntity >> gtSpotterEntitiesFor: aStep [
+	<gtSearch>
+	({GtDatabaseVisualizer.
+		DatabaseServer.
+		DatabaseInstance.
+		DatabaseSchema} anySatisfy: [ :each | self isKindOf: each ])
+		ifTrue: [ ^ self ].
+	((self hierarchyParent deepCollect: #hierarchyChildren) groupedBy: #class)
+		associations
+		withIndexDo: [ :each :index | 
+			each value: each value asSet.
+			aStep listProcessor
+				priority: index;
+				allCandidates: [ each value ];
+				title: each key name;
+				candidatesLimit: Float infinity;
+				itemName: #name;
+				filter: GtFilterSubstring ].
+	^ aStep
+]
+
+{ #category : #accessing }
 TGtDatabaseEntity >> gtTableRelationsForHelper: aView withTables: someTables [
 	^ aView mondrian
 		painting: [ :aMondrian | 

@@ -55,7 +55,8 @@ TObjectHierarchy >> gtHierarchyFor: aView [
 		children: [ :aNode | aNode hierarchyChildren ifNil: [ #() ] ];
 		actionUpdateButtonTooltip: 'Update tree';
 		column: 'Name' text: [ :aNode :anIndex | aNode asString ];
-		column: 'Type' text: [ :aNode :anIndex | aNode class ]
+		column: 'Type' text: [ :aNode :anIndex | aNode class ];
+		expandSuchThat: [ :node :nodeValue | (self deepCollect: #hierarchyParent) includes: nodeValue ]
 ]
 
 { #category : #accessing }

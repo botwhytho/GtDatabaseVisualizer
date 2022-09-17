@@ -42,8 +42,8 @@ TGtDatabaseEntity >> gtSpotterEntitiesFor: aStep [
 		DatabaseInstance.
 		DatabaseSchema} anySatisfy: [ :each | self isKindOf: each ])
 		ifTrue: [ ^ self ].
-	((self hierarchyParent deepCollect: #hierarchyChildren) groupedBy: #class)
-		associations
+	(((self findParentBySymbol: #schema) deepCollect: #hierarchyChildren)
+		groupedBy: #class) associations
 		withIndexDo: [ :each :index | 
 			each value: each value asSet.
 			aStep listProcessor
@@ -51,7 +51,12 @@ TGtDatabaseEntity >> gtSpotterEntitiesFor: aStep [
 				allCandidates: [ each value ];
 				title: each key name;
 				candidatesLimit: Float infinity;
-				itemName: #name;
+				itemFilterName: #name;
+				flag: 'TODO: Need to populate column field for indexes';
+				itemName: [ :item | 
+					item hierarchyParent
+						ifNil: [ item name ]
+						ifNotNil: [ :notNil | notNil name , '.' , item name ] ];
 				filter: GtFilterSubstring ].
 	^ aStep
 ]
